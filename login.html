@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamificação - Formulário Avançado</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("4xtRjBxAeCsXwZ5AW");
+        })();
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Quicksand:wght@500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #396BE4, #194DCD, #2D4580);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FFFFFF;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin: 20px;
+        }
+
+        h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        input[type="text"], 
+        input[type="email"], 
+        select, 
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+        }
+
+        input::placeholder, select::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #396BE4;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        button {
+            background-color: #396BE4;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #194DCD;
+            transform: translateY(-2px);
+        }
+
+        .question {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .question h3 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #FFF;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .option input[type="radio"],
+        .option input[type="checkbox"] {
+            display: none;
+        }
+
+        .option label {
+            flex-grow: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .option label::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border: 2px solid #FFF;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .option input[type="checkbox"] + label::before {
+            border-radius: 4px;
+        }
+
+        .option input[type="radio"]:checked + label::before,
+        .option input[type="checkbox"]:checked + label::before {
+            background-color: #396BE4;
+            box-shadow: inset 0 0 0 4px #FFF;
+        }
+
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            input, select, textarea, button {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ponto de Controle</h1>
+        <p>Explore com a Quantum e descubra como podemos transformar suas decisões.</p>
+        <form id="advancedForm">
+            <input type="text" id="nome" name="nome" placeholder="Nome Completo" required>
+            <input type="email" id="email" name="email" placeholder="E-mail" required>
+            <input type="text" id="empresa" name="empresa" placeholder="Nome da Empresa" required>
+            <input type="text" id="cargo" name="cargo" placeholder="Cargo" required>
+            <input type="text" id="rua" name="rua" placeholder="Rua" required>
+            <input type="text" id="numero" name="numero" placeholder="Número" required>
+            <input type="text" id="bairro" name="bairro" placeholder="Bairro" required>
+            <input type="text" id="cidade" name="cidade" placeholder="Cidade" required>
+            <input type="text" id="estado" name="estado" placeholder="Estado" required>
+            <input type="text" id="cep" name="cep" placeholder="CEP" required>
+
+            <div class="question">
+                <h3>O que motivou você a procurar um novo provedor de internet?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="motivacao1" name="motivacao" value="insatisfacao" required>
+                        <label for="motivacao1">Insatisfação com a qualidade atual da internet</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="motivacao2" name="motivacao" value="mudanca">
+                        <label for="motivacao2">Mudança de endereço</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="motivacao3" name="motivacao" value="velocidade">
+                        <label for="motivacao3">Necessidade de internet mais rápida</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="motivacao4" name="motivacao" value="atendimento">
+                        <label for="motivacao4">Desejo de melhor atendimento ao cliente</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="motivacao5" name="motivacao" value="outro">
+                        <label for="motivacao5">Outro motivo</label>
+                    </div>
+                </div>
+                <textarea id="outroMotivo" name="outroMotivo" placeholder="Especifique o outro motivo" style="display: none; margin-top: 10px;"></textarea>
+            </div>
+
+            <div class="question">
+                <h3>Quais são os principais problemas causados pela sua conexão de internet atual?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="checkbox" id="problema1" name="problemas" value="dificuldade">
+                        <label for="problema1">Dificuldade em realizar atividades online</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="problema2" name="problemas" value="interrupcoes">
+                        <label for="problema2">Interrupções frequentes do serviço e perda de dados</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="problema3" name="problemas" value="lentidao">
+                        <label for="problema3">Downloads e uploads lentos</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="problema4" name="problemas" value="nuvem">
+                        <label for="problema4">Problemas para acessar serviços em nuvem</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="problema5" name="problemas" value="outro">
+                        <label for="problema5">Outro (especifique)</label>
+                    </div>
+                </div>
+                <textarea id="outroProblema" name="outroProblema" placeholder="Especifique o outro problema" style="display: none; margin-top: 10px;"></textarea>
+            </div>
+
+            <div class="question">
+                <h3>Quais são as principais características que você busca em uma nova conexão de internet?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="checkbox" id="caracteristica1" name="caracteristicas" value="velocidade">
+                        <label for="caracteristica1">Alta velocidade e estabilidade de conexão</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="caracteristica2" name="caracteristicas" value="cobertura">
+                        <label for="caracteristica2">Cobertura em todas as áreas do meu negócio</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="caracteristica3" name="caracteristicas" value="latencia">
+                        <label for="caracteristica3">Baixa latência para videoconferências e telefonia</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="caracteristica4" name="caracteristicas" value="preco">
+                        <label for="caracteristica4">Preço acessível e planos personalizados</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="caracteristica5" name="caracteristicas" value="suporte">
+                        <label for="caracteristica5">Suporte técnico eficiente</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>Qual é o prazo ideal para a nova conexão?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="prazo1" name="prazo" value="imediato" required>
+                        <label for="prazo1">O mais rápido possível</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="prazo2" name="prazo" value="1semana">
+                        <label for="prazo2">Dentro de uma semana</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="prazo3" name="prazo" value="2semanas">
+                        <label for="prazo3">Dentro de duas semanas</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="prazo4" name="prazo" value="1mes">
+                        <label for="prazo4">Dentro de um mês</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="prazo5" name="prazo" value="semurgencia">
+                        <label for="prazo5">Sem urgência</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Iniciar Gamificação</button>
+        </form>
+        <div id="loading">Enviando dados...</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('advancedForm');
+            const outroMotivo = document.getElementById('outroMotivo');
+            const outroProblema = document.getElementById('outroProblema');
+            const loading = document.getElementById('loading');
+
+            // Show/hide "outro motivo" textarea
+            document.querySelectorAll('input[name="motivacao"]').forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    outroMotivo.style.display = this.value === 'outro' ? 'block' : 'none';
+                });
+            });
+
+            // Show/hide "outro problema" textarea
+            document.querySelectorAll('input[name="problemas"]').forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    if (this.value === 'outro') {
+                        outroProblema.style.display = this.checked ? 'block' : 'none';
+                    }
+                });
+            });
+
+            async function validateCEP(cep) {
+                try {
+                    const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                    const data = await response.json();
+                    if (data.erro) {
+                        alert('CEP inválido!');
+                        return false;
+                    } else {
+                        const validCities = [
+                            "Diadema", "Santo André", "São Caetano do Sul", "São Bernardo do Campo",
+                            "São Paulo", "Barueri", "Mauá", "Osasco", "Carapicuíba", "Guarulhos"
+                        ];
+                        if (validCities.includes(data.localidade)) {
+                            return true;
+                        } else {
+                            alert('CEP não corresponde às cidades válidas!');
+                            return false;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Erro ao consultar o CEP:', error);
+                    alert('Erro ao consultar o CEP!');
+                    return false;
+                }
+            }
+
+            function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            function sendEmail(data) {
+                return emailjs.send('Quantum', 'template_023md4d', data);
+            }
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                // Validate CEP
+                const isCEPValid = await validateCEP(data.cep);
+                if (!isCEPValid) return;
+
+                // Validate Email
+                if (!validateEmail(data.email)) {
+                    alert('Email inválido!');
+                    return;
+                }
+
+                // Handle multiple checkbox values
+                data.problemas = formData.getAll('problemas').join(', ');
+                data.caracteristicas = formData.getAll('caracteristicas').join(', ');
+
+                // Combine address fields
+                data.endereco_completo = `${data.rua}, ${data.numero}, ${data.bairro}, ${data.cidade}, ${data.estado}, ${data.cep}`;
+
+                loading.style.display = 'block';
+                form.style.opacity = '0.5';
+                form.style.pointerEvents = 'none';
+
+                try {
+                    await sendEmail(data);
+                    alert('Formulário enviado com sucesso!');
+                    //Redirect to the gamification menu
+                    window.location.href = './menu.html';
+                } catch (error) {
+                    console.error('Error sending email:', error);
+                    alert('Ocorreu um erro ao enviar o formulário. Por favor, tente novamente.');
+                } finally {
+                    loading.style.display = 'none';
+                    form.style.opacity = '1';
+                    form.style.pointerEvents = 'auto';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

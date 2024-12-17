@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu de Gamificação</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Quicksand:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #396BE4, #194DCD, #2D4580);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FFFFFF;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin: 20px;
+        }
+
+        .logo img {
+            width: 200px;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 30px;
+        }
+
+        h1,
+        h2 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+        }
+
+        h2 {
+            font-size: 1.8em;
+        }
+
+        .quiz-menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .quiz-btn {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background-color: #396BE4;
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-btn:hover {
+            background-color: #194DCD;
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-container,
+        .progress-bar {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 10px;
+            margin: 30px 0;
+        }
+
+        .progress-bar .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #396BE4;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .side-buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .contact-btn,
+        .return-btn {
+            flex: 1;
+            padding: 15px 25px;
+            border-radius: 30px;
+            background-color: #396BE4;
+            color: #FFFFFF;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-btn:hover,
+        .return-btn:hover {
+            background-color: #194DCD;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            max-width: 90%;
+            width: 500px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+        }
+
+        .popup.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .popup h2 {
+            margin-top: 0;
+            color: #FFFFFF;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .popup p {
+            margin-bottom: 30px;
+            color: #FFFFFF;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        .popup-button {
+            background: #FF6B00;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+        }
+
+        .popup-button:hover {
+            background: #E65100;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .glass-container {
+                padding: 30px;
+                margin: 15px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .quiz-menu {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .quiz-btn {
+                width: 120px;
+                height: 120px;
+                font-size: 16px;
+            }
+
+            .side-buttons {
+                flex-direction: column;
+            }
+
+            .contact-btn,
+            .return-btn {
+                width: 100%;
+            }
+
+            .popup {
+                width: 90%;
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glass-container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            .quiz-btn {
+                width: 100px;
+                height: 100px;
+                font-size: 14px;
+            }
+
+            .popup {
+                padding: 20px;
+            }
+
+            .popup h2 {
+                font-size: 1.6em;
+            }
+
+            .popup p {
+                font-size: 1em;
+            }
+
+            .popup-button {
+                padding: 12px 24px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="glass-container">
+            <div class="logo">
+                <img src="./imgs/Quantum.webp" alt="Logo da Quantum">
+            </div>
+
+            <div class="quiz-menu">
+                <button class="quiz-btn" onclick="goToQuiz('internet')">Internet Empresarial</button>
+                <button class="quiz-btn" onclick="goToQuiz('cloud')">Cloud</button>
+                <button class="quiz-btn" onclick="goToQuiz('seguranca')">Segurança</button>
+            </div>
+
+            <div class="progress-feedback-container">
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+
+                <div class="side-buttons">
+                    <button class="contact-btn" onclick="goToContact()">Contatos</button>
+                    <button class="return-btn" onclick="returnToSite()">Voltar ao Site</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup" class="popup">
+        <h2>Bem-vindo ao Quiz!</h2>
+        <p>Prepare-se para testar seus conhecimentos sobre tecnologias empresariais. Este quiz abordará tópicos de
+            Internet Empresarial, Cloud e Segurança. Você está pronto para começar esta jornada de aprendizado?</p>
+        <button class="popup-button" onclick="startQuiz()">Começar Quiz</button>
+    </div>
+
+    <script>
+        function goToQuiz(type) {
+            switch (type) {
+                case 'internet':
+                    window.location.href = "./internet.html";
+                    break;
+                case 'cloud':
+                    window.location.href = "./cloud.html";
+                    break;
+                case 'seguranca':
+                    window.location.href = "./seguranca.html";
+                    break;
+                default:
+                    console.error('Quiz type not recognized');
+            }
+        }
+
+        function goToContact() {
+            window.location.href = "./contato.html";
+        }
+
+        function returnToSite() {
+            window.location.href = 'https://www.quantumdigital.com.br/';
+        }
+
+        function startQuiz() {
+            document.getElementById('popup').classList.remove('show');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const popup = document.getElementById('popup');
+
+            setTimeout(() => {
+                popup.classList.add('show');
+            }, 1000);
+
+            // Ensure buttons are clickable
+            document.querySelectorAll('button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const clickFunction = button.getAttribute('onclick');
+                    if (clickFunction) {
+                        eval(clickFunction);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

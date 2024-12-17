@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fale Conosco - Quantum</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Quicksand:wght@500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #396BE4, #194DCD, #2D4580);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FFFFFF;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /*position: relative;*/
+        }
+
+        .contact-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px;
+        }
+
+        h1,
+        h2 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+
+        p {
+            font-size: 1em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .contact-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-item h2 {
+            margin-bottom: 15px;
+        }
+
+        .contact-item p {
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .icon-placeholder {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .icon-placeholder img {
+            position: absolute;
+            top: 0px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+
+        .contact-link {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 30px;
+            background-color: #396BE4;
+            color: #FFFFFF;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            align-self: center;
+        }
+
+        .contact-link:hover {
+            background-color: #194DCD;
+            transform: scale(1.05);
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 30px;
+            background-color: #396BE4;
+            color: #FFFFFF;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .back-button:hover {
+            background-color: #194DCD;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .contact-container {
+                padding: 30px;
+                margin: 15px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .contact-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="contact-container">
+            <h1 class="title">Como Podemos Ajudar?</h1>
+            <p class="subtitle">Escolha o canal ideal para o tipo de contato que deseja fazer</p>
+            <div class="contact-options">
+                <div class="contact-item">
+                    <div class="icon-placeholder">
+                        <img src="./imgs/1x/site_2.webp" alt="Ícone do Site">
+                    </div>
+                    <h2>Site</h2>
+                    <p>Explore conteúdos institucionais, como nossos projetos, valores e portfólio. Ideal para conhecer
+                        mais sobre a Quantum.</p>
+                    <a href="www.quantumdigital" class="contact-link" target="_blank">Acessar Site</a>
+                </div>
+                <div class="contact-item">
+                    <div class="icon-placeholder">
+                        <img src="./imgs/1x/insta.webp" alt="Ícone do Instagram">
+                    </div>
+                    <h2>Instagram</h2>
+                    <p>Acompanhe atualizações, projetos e interaja. Perfeito para perguntas rápidas ou se conectar com
+                        nossa comunidade.</p>
+                    <a href="https://www.instagram.com/quantum_socialmedia/?igsh=MXJ1NjFvd2xiNHNtOQ%3D%3D"
+                        class="contact-link" target="_blank">Siga-nos e descubra mais!</a>
+                </div>
+                <div class="contact-item">
+                    <div class="icon-placeholder">
+                        <img src="./imgs/1x/whats.webp" alt="Ícone do WhatsApp">
+                    </div>
+                    <h2>WhatsApp</h2>
+                    <p>Fale diretamente com nossa equipe para tirar dúvidas rápidas ou receber informações mais
+                        urgentes.</p>
+                    <a href="https://wa.me/5511978137265" class="contact-link" target="_blank">Iniciar Conversa</a>
+                </div>
+                <div class="contact-item">
+                    <div class="icon-placeholder">
+                        <img src="./imgs/1x/email.webp" alt="Ícone do Email">
+                    </div>
+                    <h2>E-mail</h2>
+                    <p>Entre em contato para assuntos mais detalhados, como agendamento de reuniões ou propostas de
+                        parceria.</p>
+                    <a href="/cdn-cgi/l/email-protection#9ffcf0f1ebfeebf0dfeeeafef1ebeaf2b1fcf0f2"
+                        class="contact-link"><span class="__cf_email__"
+                            data-cfemail="d7b4b8b9a3b6a3b897a6a2b6b9a3a2baf9b4b8ba">Vamos agendar uma
+                            reunião?</span></a>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <a href="menu.html" class="back-button">Voltar ao Menu</a>
+            </div>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script>
+        function goToContact() {
+            window.location.href = "./contato.html";
+        }
+    </script>
+</body>
+
+</html>

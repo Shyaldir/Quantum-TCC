@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Quantum - Internet Corporativa</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #396BE4, #194DCD);
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            width: 150px;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 30px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #FFFFFF;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            margin-bottom: 40px;
+            font-size: 1.2em;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .option {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #FFFFFF;
+            text-align: left;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background-color: #2D4580;
+            border-color: #FFFFFF;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .checkbox-indicator,
+        .radio-indicator {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #FFFFFF;
+            margin-right: 15px;
+            display: inline-block;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .checkbox-indicator {
+            border-radius: 4px;
+        }
+
+        .radio-indicator {
+            border-radius: 50%;
+        }
+
+        .option.selected .checkbox-indicator::after,
+        .option.selected .radio-indicator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background-color: #FFFFFF;
+        }
+
+        .option.selected .checkbox-indicator::after {
+            border-radius: 2px;
+        }
+
+        .option.selected .radio-indicator::after {
+            border-radius: 50%;
+        }
+
+        .next-button {
+            background-color: #2D4580;
+            color: #FFFFFF;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            margin: 30px auto 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .next-button:hover {
+            background-color: #194DCD;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .next-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #2D4580;
+            transition: width 0.3s ease;
+        }
+
+        .question-counter {
+            text-align: center;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .scale-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .scale-labels span {
+            font-size: 24px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 20px 0;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            height: 10px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #2D4580;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: #2D4580;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .scale-value {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .drag-drop-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .drag-items,
+        .drop-targets {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .drag-item,
+        .drop-target {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: move;
+            flex: 0 1 calc(50% - 10px);
+            text-align: center;
+        }
+
+        .drop-target {
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sortable-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sortable-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .sortable-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .word-search-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .word-search-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .word-search-cell {
+            aspect-ratio: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: clamp(14px, 3vw, 20px);
+            font-weight: bold;
+            transition: all 0.3s ease;
+            user-select: none;
+            min-width: 30px;
+            min-height: 30px;
+        }
+
+        .word-search-cell.selected {
+            background-color: #2D4580;
+            color: white;
+        }
+
+        .word-search-cell.found {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .word-list span {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .word-list span.found {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .memory-game-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .memory-game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background-color: #2D4580;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            perspective: 1000px;
+        }
+
+        .memory-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .memory-card-front,
+        .memory-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+        }
+
+        .memory-card-front {
+            background-color: #2D4580;
+        }
+
+        .memory-card-back {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: rotateY(180deg);
+            font-size: 16px;
+            color: white;
+        }
+
+        .memory-card.matched {
+            visibility: hidden;
+        }
+
+        .feedback-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .insignia {
+            width: 150px;
+            height: 150px;
+            margin: 20px 0;
+            opacity: 0;
+            transform: scale(0);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .insignia.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .score-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .score-container.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .risk-level {
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .feedback-carousel {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .feedback-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .feedback-item.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .feedback-item.prev {
+            transform: translateX(-100%);
+        }
+
+        .risk-explanation {
+            margin: 20px 0;
+            font-style: italic;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .risk-explanation.show {
+            opacity: 1;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .button-container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .drag-items,
+            .drop-targets {
+                flex-direction: column;
+            }
+
+            .drag-item,
+            .drop-target {
+                width: 100%;
+            }
+
+            .memory-game-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5px;
+            }
+
+            .score-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .feedback-carousel {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="quiz-container">
+        <img src="imgs/Quantum.webp" alt="Logo da Quantum" class="logo">
+        <h1>Quiz Quantum - Internet Corporativa</h1>
+        <div id="question-container">
+            <div id="question-text" class="question"></div>
+            <div id="options-container" class="options"></div>
+        </div>
+        <button id="next-button" class="next-button" disabled>Próxima Pergunta</button>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div>
+    <script>
+        const questions = [
+            {
+                type: "multiple-choice",
+                text: "Qual é o principal benefício de uma conexão de internet corporativa dedicada?",
+                options: [
+                    "Maior velocidade e estabilidade",
+                    "Menor custo mensal",
+                    "Acesso exclusivo a certos websites",
+                    "Não há benefícios significativos"
+                ],
+                weights: [3, 1, 2, 0]
+            },
+            {
+                type: "checkbox",
+                text: "Quais tecnologias de conexão são comumente usadas em redes corporativas?",
+                options: [
+                    "Fibra óptica",
+                    "ADSL",
+                    "Link dedicado",
+                    "Internet móvel 5G"
+                ],
+                weights: [3, 1, 3, 2]
+            },
+            {
+                type: "scale",
+                id: "reliability-scale",
+                text: "Em uma escala de 1 a 5, quão confiável é a conexão de internet atual da sua empresa?",
+                options: [
+                    "Muito pouco confiável",
+                    "Pouco confiável",
+                    "Razoavelmente confiável",
+                    "Confiável",
+                    "Extremamente confiável"
+                ],
+                weights: [1, 2, 3, 4, 5],
+                images: {
+                    negative: "😰",
+                    positive: "😊"
+                }
+            },
+            {
+                type: "drag-drop",
+                text: "Associe os termos de internet corporativa às suas definições corretas:",
+                items: [
+                    { id: "bandwidth", text: "Largura de Banda" },
+                    { id: "latency", text: "Latência" },
+                    { id: "redundancy", text: "Redundância" }
+                ],
+                targets: [
+                    { id: "bandwidth-def", text: "Quantidade de dados que podem ser transmitidos em um determinado período" },
+                    { id: "latency-def", text: "Tempo que leva para os dados viajarem de um ponto a outro" },
+                    { id: "redundancy-def", text: "Duplicação de componentes críticos para aumentar a confiabilidade" }
+                ],
+                correctPairs: [
+                    { item: "bandwidth", target: "bandwidth-def" },
+                    { item: "latency", target: "latency-def" },
+                    { item: "redundancy", target: "redundancy-def" }
+                ]
+            },
+            {
+                type: "sortable",
+                text: "Ordene as etapas de implementação de uma nova conexão de internet corporativa:",
+                items: [
+                    "Avaliação das necessidades",
+                    "Pesquisa de provedores",
+                    "Comparação de propostas",
+                    "Negociação de contrato",
+                    "Instalação da infraestrutura",
+                    "Configuração da rede",
+                    "Testes e otimização"
+                ],
+                correctOrder: [
+                    "Avaliação das necessidades",
+                    "Pesquisa de provedores",
+                    "Comparação de propostas",
+                    "Negociação de contrato",
+                    "Instalação da infraestrutura",
+                    "Configuração da rede",
+                    "Testes e otimização"
+                ]
+            },
+            {
+                type: "word-search",
+                text: "Encontre os termos relacionados à internet corporativa no caça-palavras:",
+                grid: [
+                    ['F', 'I', 'B', 'R', 'A', 'O', 'T', 'I', 'C', 'A'],
+                    ['I', 'P', 'F', 'I', 'X', 'O', 'C', 'L', 'O', 'U'],
+                    ['R', 'E', 'D', 'U', 'N', 'D', 'A', 'N', 'C', 'I'],
+                    ['E', 'L', 'A', 'T', 'E', 'N', 'C', 'I', 'A', 'A'],
+                    ['W', 'I', 'F', 'I', '6', 'B', 'A', 'N', 'C', 'H'],
+                    ['A', 'N', 'E', 'T', 'W', 'O', 'R', 'K', 'H', 'O'],
+                    ['L', 'K', 'D', 'E', 'D', 'I', 'C', 'A', 'D', 'O'],
+                    ['L', 'V', 'P', 'N', 'S', 'E', 'G', 'U', 'R', 'A']
+                ],
+                words: ['FIBRA', 'DEDICADO', 'REDUNDANCIA', 'LATENCIA', 'WIFI6', 'VPN', 'IPFIXO', 'NETWORK']
+            },
+            {
+                type: "memory-game",
+                text: "Encontre os pares de termos relacionados à internet corporativa:",
+                cards: [
+                    { id: 1, content: "Fibra" },
+                    { id: 2, content: "Óptica" },
+                    { id: 3, content: "Link" },
+                    { id: 4, content: "Dedicado" },
+                    { id: 5, content: "IP" },
+                    { id: 6, content: "Fixo" },
+                    { id: 7, content: "Banda" },
+                    { id: 8, content: "Larga" }
+                ]
+            },
+            {
+                type: "multiple-choice",
+                text: "Qual é o principal desafio de conectividade que sua empresa enfrenta atualmente?",
+                options: [
+                    "Velocidade insuficiente",
+                    "Instabilidade da conexão",
+                    "Alto custo",
+                    "Falta de suporte técnico"
+                ],
+                weights: [3, 3, 2, 2]
+            },
+            {
+                type: "scale",
+                id: "investment-scale",
+                text: "Em que medida sua empresa está disposta a investir em melhorias na conexão de internet?",
+                options: [
+                    "Não há interesse em investir",
+                    "Pequenos investimentos pontuais",
+                    "Investimentos moderados",
+                    "Grandes investimentos planejados",
+                    "Prioridade máxima de investimento"
+                ],
+                weights: [1, 2, 3, 4, 5],
+                images: {
+                    negative: "💸",
+                    positive: "🤑"
+                }
+            },
+            {
+                type: "checkbox",
+                text: "Quais recursos de segurança sua empresa utiliza em sua conexão de internet corporativa?",
+                options: [
+                    "Firewall de próxima geração",
+                    "VPN para acesso remoto",
+                    "Segmentação de rede",
+                    "Não utilizamos recursos avançados de segurança"
+                ],
+                weights: [3, 2, 3, 0]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+
+        const questionContainer = document.getElementById('question-container');
+        const nextButton = document.getElementById('next-button');
+        const progressBar = document.getElementById('progress');
+
+        function displayQuestion() {
+            questionContainer.style.opacity = '0';
+            setTimeout(() => {
+                const question = questions[currentQuestion];
+                let optionsHtml = '';
+
+                switch (question.type) {
+                    case 'multiple-choice':
+                    case 'checkbox':
+                        const indicator = question.type === 'checkbox' ?
+                            '<div class="multiple-choice-indicator">Você pode selecionar mais de uma opção</div>' : '';
+                        const indicatorClass = question.type === 'checkbox' ? 'checkbox-indicator' : 'radio-indicator';
+
+                        optionsHtml = `
+                            ${indicator}
+                            ${question.options.map((option, index) => `
+                                <button class="option" data-index="${index}">
+                                    <span class="${indicatorClass}"></span>
+                                    ${option}
+                                </button>
+                            `).join('')}
+                        `;
+                        break;
+                    case 'scale':
+                        optionsHtml = `
+                            <div class="scale-container">
+                                <input type="range" min="1" max="5" value="3" class="slider" id="scale-input">
+                                <div class="scale-value" id="scale-value">Médio</div>
+                                <div class="scale-labels">
+                                    <span>${question.images.negative}</span>
+                                    <span>${question.images.positive}</span>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'drag-drop':
+                        optionsHtml = `
+                            <div class="drag-drop-container">
+                                <div class="drag-items">
+                                    ${question.items.map(item => `
+                                        <div class="drag-item" draggable="true" data-id="${item.id}">${item.text}</div>
+                                    `).join('')}
+                                </div>
+                                <div class="drop-targets">
+                                    ${question.targets.map(target => `
+                                        <div class="drop-target" data-id="${target.id}">${target.text}</div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'sortable':
+                        optionsHtml = `
+                            <ul class="sortable-list">
+                                ${question.items.map((item, index) => `
+                                    <li class="sortable-item" draggable="true" data-index="${index}">${item}</li>
+                                `).join('')}
+                            </ul>
+                        `;
+                        break;
+                    case 'word-search':
+                        optionsHtml = `
+                            <div class="word-search-container">
+                                <div class="word-search-grid">
+                                    ${question.grid.flat().map((cell, index) => `
+                                        <div class="word-search-cell" data-index="${index}">${cell}</div>
+                                    `).join('')}
+                                </div>
+                                <div class="word-list">
+                                    ${question.words.map(word => `<span>${word}</span>`).join('')}
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'memory-game':
+                        optionsHtml = `
+                            <div class="memory-game-grid"></div>
+                        `;
+                        break;
+                }
+
+                questionContainer.innerHTML = `
+                    <div class="question-counter">Pergunta ${currentQuestion + 1} de ${questions.length}</div>
+                    <div class="question">
+                        <h2>${question.text}</h2>
+                        <div class="options">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `;
+
+                setupQuestionInteractions(question);
+                updateProgressBar();
+                questionContainer.style.opacity = '1';
+            }, 300);
+        }
+
+        function setupQuestionInteractions(question) {
+            switch (question.type) {
+                case 'multiple-choice':
+                case 'checkbox':
+                    const options = questionContainer.querySelectorAll('.option');
+                    options.forEach(option => {
+                        option.addEventListener('click', () => {
+                            if (question.type === 'multiple-choice') {
+                                options.forEach(opt => opt.classList.remove('selected'));
+                                option.classList.add('selected');
+                            } else {
+                                option.classList.toggle('selected');
+                            }
+                            updateNextButtonState();
+                        });
+                    });
+                    break;
+                case 'scale':
+                    const slider = document.getElementById("scale-input");
+                    const scaleValue = document.getElementById("scale-value");
+                    slider.addEventListener('input', () => {
+                        scaleValue.textContent = question.options[slider.value - 1];
+                        updateNextButtonState();
+                    });
+                    break;
+                case 'drag-drop':
+                    setupDragAndDrop();
+                    break;
+                case 'sortable':
+                    setupSortable();
+                    break;
+                case 'word-search':
+                    setupWordSearch();
+                    break;
+                case 'memory-game':
+                    setupMemoryGame();
+                    break;
+            }
+        }
+
+        function setupDragAndDrop() {
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropTargets = document.querySelectorAll('.drop-target');
+
+            dragItems.forEach(item => {
+                item.addEventListener('dragstart', dragStart);
+                item.addEventListener('dragend', dragEnd);
+                item.addEventListener('touchstart', touchStart, { passive: false });
+                item.addEventListener('touchmove', touchMove, { passive: false });
+                item.addEventListener('touchend', touchEnd);
+            });
+
+            dropTargets.forEach(target => {
+                target.addEventListener('dragover', dragOver);
+                target.addEventListener('dragenter', dragEnter);
+                target.addEventListener('dragleave', dragLeave);
+                target.addEventListener('drop', drop);
+            });
+
+            function dragStart(e) {
+                this.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', this.dataset.id);
+            }
+
+            function dragEnd() {
+                this.classList.remove('dragging');
+            }
+
+            function dragOver(e) {
+                e.preventDefault();
+            }
+
+            function dragEnter(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            }
+
+            function dragLeave() {
+                this.classList.remove('drag-over');
+            }
+
+            function drop(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                const draggedItemId = e.dataTransfer.getData('text/plain');
+                const draggedItem = document.querySelector(`.drag-item[data-id="${draggedItemId}"]`);
+                this.appendChild(draggedItem);
+                updateNextButtonState();
+            }
+
+            function touchStart(e) {
+                e.preventDefault();
+                this.classList.add('dragging');
+            }
+
+            function touchMove(e) {
+                e.preventDefault();
+                const touch = e.targetTouches[0];
+                this.style.position = 'absolute';
+                this.style.left = `${touch.pageX - this.offsetWidth / 2}px`;
+                this.style.top = `${touch.pageY - this.offsetHeight / 2}px`;
+            }
+
+            function touchEnd(e) {
+                e.preventDefault();
+                this.classList.remove('dragging');
+                this.style.position = 'static';
+                const dropTarget = document.elementFromPoint(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+                if (dropTarget && dropTarget.classList.contains('drop-target')) {
+                    dropTarget.appendChild(this);
+                    updateNextButtonState();
+                }
+            }
+        }
+
+        function setupSortable() {
+            const sortableList = document.querySelector('.sortable-list');
+            let draggedItem = null;
+
+            sortableList.addEventListener('dragstart', (e) => {
+                draggedItem = e.target;
+                setTimeout(() => e.target.style.display = 'none', 0);
+            });
+
+            sortableList.addEventListener('dragend', (e) => {
+                setTimeout(() => e.target.style.display = '', 0);
+                draggedItem = null;
+                updateNextButtonState();
+            });
+
+            sortableList.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(sortableList, e.clientY);
+                const currentElement = document.querySelector('.dragging');
+                if (afterElement == null) {
+                    sortableList.appendChild(draggedItem);
+                } else {
+                    sortableList.insertBefore(draggedItem, afterElement);
+                }
+            });
+
+            sortableList.addEventListener('touchstart', (e) => {
+                const item = e.target.closest('.sortable-item');
+                if (!item) return;
+                draggedItem = item;
+                item.classList.add('dragging');
+            }, { passive: false });
+
+            sortableList.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const touch = e.targetTouches[0];
+                const afterElement = getDragAfterElement(sortableList, touch.clientY);
+                if (afterElement == null) {
+                    sortableList.appendChild(draggedItem);
+                } else {
+                    sortableList.insertBefore(draggedItem, afterElement);
+                }
+            }, { passive: false });
+
+            sortableList.addEventListener('touchend', () => {
+                if (draggedItem) {
+                    draggedItem.classList.remove('dragging');
+                    draggedItem = null;
+                    updateNextButtonState();
+                }
+            });
+
+            function getDragAfterElement(container, y) {
+                const draggableElements = [...container.querySelectorAll('.sortable-item:not(.dragging)')];
+
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+        }
+
+        function setupWordSearch() {
+            const wordSearchContainer = document.querySelector('.word-search-container');
+            const cells = wordSearchContainer.querySelectorAll('.word-search-cell');
+            const wordList = wordSearchContainer.querySelector('.word-list');
+            let selectedCells = [];
+            let isSelecting = false;
+            let foundWords = new Set();
+
+            cells.forEach(cell => {
+                cell.addEventListener('mousedown', startSelection);
+                cell.addEventListener('mouseover', continueSelection);
+                cell.addEventListener('touchstart', startSelection, { passive: false });
+                cell.addEventListener('touchmove', touchMoveSelection, { passive: false });
+            });
+
+            document.addEventListener('mouseup', endSelection);
+            document.addEventListener('touchend', endSelection);
+
+            function startSelection(e) {
+                e.preventDefault();
+                isSelecting = true;
+                selectedCells = [this];
+                this.classList.add('selected');
+            }
+
+            function continueSelection() {
+                if (isSelecting && !selectedCells.includes(this)) {
+                    this.classList.add('selected');
+                    selectedCells.push(this);
+                }
+            }
+
+            function touchMoveSelection(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const cell = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (cell && cell.classList.contains('word-search-cell') && !selectedCells.includes(cell)) {
+                    cell.classList.add('selected');
+                    selectedCells.push(cell);
+                }
+            }
+
+            function endSelection() {
+                isSelecting = false;
+                const word = selectedCells.map(cell => cell.textContent).join('');
+                const question = questions[currentQuestion];
+
+                if (isValidWord(word, question.words)) {
+                    selectedCells.forEach(cell => {
+                        cell.classList.remove('selected');
+                        cell.classList.add('found');
+                    });
+                    foundWords.add(word);
+                    updateWordList();
+                } else {
+                    selectedCells.forEach(cell => cell.classList.remove('selected'));
+                }
+                selectedCells = [];
+                updateNextButtonState();
+            }
+
+            function isValidWord(word, wordList) {
+                return wordList.some(validWord =>
+                    validWord === word || validWord === word.split('').reverse().join('')
+                );
+            }
+
+            function updateWordList() {
+                const wordSpans = wordList.querySelectorAll('span');
+                wordSpans.forEach(span => {
+                    if (foundWords.has(span.textContent) || foundWords.has(span.textContent.split('').reverse().join(''))) {
+                        span.classList.add('found');
+                    }
+                });
+            }
+        }
+
+        function setupMemoryGame() {
+            const memoryGameContainer = document.querySelector('.memory-game-grid');
+            const question = questions[currentQuestion];
+            let cards = question.cards.slice();
+            let flippedCards = [];
+            let matchedPairs = 0;
+            let canFlip = false;
+
+            // Shuffle cards
+            cards = cards.concat(cards); // Duplicate cards for pairs
+            cards.sort(() => Math.random() - 0.5);
+
+            // Create card elements
+            cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('memory-card');
+                cardElement.dataset.id = index;
+                cardElement.innerHTML = `
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front"></div>
+                        <div class="memory-card-back">${card.content}</div>
+                    </div>
+                `;
+                memoryGameContainer.appendChild(cardElement);
+            });
+
+            // Show cards for 8 seconds
+            memoryGameContainer.querySelectorAll('.memory-card').forEach(card => card.classList.add('flipped'));
+            setTimeout(() => {
+                memoryGameContainer.querySelectorAll('.memory-card').forEach(card => card.classList.remove('flipped'));
+                canFlip = true;
+            }, 8000);
+
+            memoryGameContainer.addEventListener('click', handleCardClick);
+
+            function handleCardClick(e) {
+                const clickedCard = e.target.closest('.memory-card');
+                if (!clickedCard || !canFlip || flippedCards.length >= 2 || clickedCard.classList.contains('flipped') || clickedCard.classList.contains('matched')) return;
+
+                clickedCard.classList.add('flipped');
+                flippedCards.push(clickedCard);
+
+                if (flippedCards.length === 2) {
+                    canFlip = false;
+                    checkForMatch();
+                }
+            }
+
+            function checkForMatch() {
+                const [card1, card2] = flippedCards;
+                if (card1.querySelector('.memory-card-back').textContent === card2.querySelector('.memory-card-back').textContent) {
+                    card1.classList.add('matched');
+                    card2.classList.add('matched');
+                    matchedPairs++;
+                    if (matchedPairs === cards.length / 2) {
+                        setTimeout(() => {
+                            alert('Parabéns! Você encontrou todos os pares!');
+                            updateNextButtonState();
+                        }, 500);
+                    }
+                } else {
+                    setTimeout(() => {
+                        card1.classList.remove('flipped');
+                        card2.classList.remove('flipped');
+                    }, 1000);
+                }
+                flippedCards = [];
+                setTimeout(() => {
+                    canFlip = true;
+                }, 1000);
+            }
+        }
+
+        function getAnswer() {
+            const question = questions[currentQuestion];
+            switch (question.type) {
+                case 'multiple-choice':
+                    const selectedOption = questionContainer.querySelector('.option.selected');
+                    return selectedOption ? parseInt(selectedOption.dataset.index) : null;
+                case 'checkbox':
+                    const selectedOptions = questionContainer.querySelectorAll('.option.selected');
+                    return Array.from(selectedOptions).map(option => parseInt(option.dataset.index));
+                case 'scale':
+                    return parseInt(document.getElementById("scale-input").value);
+                case 'drag-drop':
+                    const pairs = [];
+                    document.querySelectorAll('.drop-target').forEach(target => {
+                        const item = target.querySelector('.drag-item');
+                        if (item) {
+                            pairs.push({ item: item.dataset.id, target: target.dataset.id });
+                        }
+                    });
+                    return pairs;
+                case 'sortable':
+                    return Array.from(document.querySelectorAll('.sortable-item')).map(item => item.textContent);
+                case 'word-search':
+                    const foundWords = new Set();
+                    const cells = document.querySelectorAll('.word-search-cell.found');
+                    cells.forEach(cell => {
+                        const index = parseInt(cell.dataset.index);
+                        const row = Math.floor(index / 10);
+                        const col = index % 10;
+                        question.words.forEach(word => {
+                            if (checkWord(word, row, col, question.grid)) {
+                                foundWords.add(word);
+                            }
+                        });
+                    });
+                    return Array.from(foundWords);
+                case 'memory-game':
+                    const matchedCards = document.querySelectorAll('.memory-card.matched');
+                    return matchedCards.length / 2; // Return the number of matched pairs
+            }
+        }
+
+        function calculateScore(answer) {
+            const question = questions[currentQuestion];
+            let scoreDeduction = 0;
+            switch (question.type) {
+                case 'multiple-choice':
+                    scoreDeduction = 10 - question.weights[answer];
+                    break;
+                case 'checkbox':
+                    const maxPossibleScore = question.weights.reduce((a, b) => a + b, 0);
+                    const actualScore = answer.reduce((sum, index) => sum + question.weights[index], 0);
+                    scoreDeduction = 10 * (1 - actualScore / maxPossibleScore);
+                    break;
+                case 'scale':
+                    scoreDeduction = 10 - question.weights[answer - 1] * 2;
+                    break;
+                case 'drag-drop':
+                    const correctPairs = question.correctPairs;
+                    const correctCount = answer.filter(pair =>
+                        correctPairs.some(cp => cp.item === pair.item && cp.target === pair.target)
+                    ).length;
+                    scoreDeduction = 10 * (1 - correctCount / correctPairs.length);
+                    break;
+                case 'sortable':
+                    const correctOrder = question.correctOrder;
+                    const correctPositions = answer.filter((item, index) => item === correctOrder[index]).length;
+                    scoreDeduction = 10 * (1 - correctPositions / correctOrder.length);
+                    break;
+                case 'word-search':
+                    scoreDeduction = 10 * (1 - answer.length / question.words.length);
+                    break;
+                case 'memory-game':
+                    scoreDeduction = 10 * (1 - answer / (question.cards.length / 2));
+                    break;
+            }
+            return Math.max(scoreDeduction, 0);
+        }
+
+        function updateNextButtonState() {
+            const answer = getAnswer();
+            nextButton.disabled = answer === null || (Array.isArray(answer) && answer.length === 0);
+        }
+
+        nextButton.addEventListener('click', () => {
+            const answer = getAnswer();
+            if (answer !== null && answer !== undefined && (Array.isArray(answer) ? answer.length > 0 : true)) {
+                userAnswers.push(answer);
+                score += calculateScore(answer);
+                currentQuestion++;
+
+                if (currentQuestion < questions.length) {
+                    setTimeout(displayQuestion, 300);
+                } else {
+                    setTimeout(showResults, 300);
+                }
+            } else {
+                alert('Por favor, responda à pergunta antes de continuar.');
+            }
+        });
+
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function showResults() {
+            const quizContainer = document.getElementById('quiz-container');
+            const feedback = generateFeedback(userAnswers);
+            const finalScore = Math.max(0, 100 - score).toFixed(2);
+            const riskLevel = finalScore > 80 ? 'Baixo' : finalScore > 60 ? 'Médio' : 'Alto';
+
+            quizContainer.innerHTML = `
+                <div class="feedback-container">
+                    <h2>Parabéns por concluir o Quiz!</h2>
+                    <img src="imgs/1x/internet.webp" alt="Quantum Expert Badge" class="insignia">
+                    <p>Você completou com sucesso o Quiz Quantum sobre Internet Corporativa.</p>
+                    <div class="score-container">
+                        <h3>Sua pontuação de eficiência: ${finalScore}%</h3>
+                        <div class="risk-level" style="background-color: ${getRiskLevelColor(riskLevel)}">
+                            Nível de Oportunidade: ${riskLevel}
+                        </div>
+                    </div>
+                    <div class="feedback-carousel"></div>
+                    <p class="risk-explanation">Quanto menor a pontuação, maior a oportunidade de melhoria para sua empresa. A Quantum pode ajudar a otimizar sua conectividade e eficiência em TI.</p>
+                    <div class="button-container">
+                        <button id="download-pdf" class="next-button">Baixar Relatório PDF</button>
+                        <button id="contact-quantum" class="next-button">Falar com um Especialista</button>
+                        <button id="back-to-menu" class="next-button">Voltar ao Menu</button>
+                    </div>
+                </div>
+            `;
+
+            const feedbackCarousel = document.querySelector('.feedback-carousel');
+            const shuffledFeedback = shuffleArray(feedback);
+            shuffledFeedback.forEach((item, index) => {
+                const feedbackItem = document.createElement('div');
+                feedbackItem.classList.add('feedback-item');
+                feedbackItem.innerHTML = `
+                    <h3>${item.title}</h3>
+                    <p>${item.feedback}</p>
+                    <p><strong>Recomendação:</strong> ${item.recommendation}</p>
+                `;
+                feedbackCarousel.appendChild(feedbackItem);
+            });
+
+            animateFeedback();
+
+            document.getElementById('download-pdf').addEventListener('click', () => generatePersonalizedPDF(finalScore, riskLevel, feedback));
+            document.getElementById('contact-quantum').addEventListener('click', contactSpecialist);
+            document.getElementById('back-to-menu').addEventListener('click', () => {
+                window.location.href = 'menu.html';
+            });
+
+            sendResultsToEmail(finalScore, riskLevel, feedback);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function animateFeedback() {
+            const insignia = document.querySelector('.insignia');
+            const scoreContainer = document.querySelector('.score-container');
+            const feedbackItems = document.querySelectorAll('.feedback-item');
+            const riskExplanation = document.querySelector('.risk-explanation');
+            const buttonContainer = document.querySelector('.button-container');
+
+            setTimeout(() => insignia.classList.add('show'), 300);
+            setTimeout(() => scoreContainer.classList.add('show'), 600);
+
+            let currentIndex = 0;
+            showFeedbackItem(currentIndex);
+
+            setTimeout(() => riskExplanation.classList.add('show'), 900 + feedbackItems.length * 300);
+            setTimeout(() => buttonContainer.classList.add('show'), 1200 + feedbackItems.length * 300);
+
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % feedbackItems.length;
+                showFeedbackItem(currentIndex);
+            }, 5000);
+        }
+
+        function showFeedbackItem(index) {
+            const feedbackItems = document.querySelectorAll('.feedback-item');
+            feedbackItems.forEach((item, i) => {
+                item.classList.remove('active', 'prev');
+                if (i === index) {
+                    item.classList.add('active');
+                } else if (i === (index - 1 + feedbackItems.length) % feedbackItems.length) {
+                    item.classList.add('prev');
+                }
+            });
+        }
+
+        function getRiskLevelColor(level) {
+            switch (level) {
+                case 'Baixo': return '#4CAF50';
+                case 'Médio': return '#FFC107';
+                case 'Alto': return '#F44336';
+                default: return '#2D4580';
+            }
+        }
+
+        function generateFeedback(answers) {
+            const feedbackItems = [
+                {
+                    title: "Qualidade da Conexão",
+                    check: (answers) => answers[0] !== 0,
+                    feedback: "A qualidade da sua conexão de internet corporativa pode ser melhorada para aumentar a produtividade e eficiência.",
+                    recommendation: "Considere investir em uma conexão de internet dedicada de alta velocidade para garantir estabilidade e desempenho consistentes."
+                },
+                {
+                    title: "Tecnologias de Conexão",
+                    check: (answers) => !answers[1].includes(0),
+                    feedback: "Sua empresa pode se beneficiar da adoção de tecnologias de conexão mais modernas e eficientes.",
+                    recommendation: "Explore opções como fibra óptica e links dedicados para melhorar a velocidade e confiabilidade da sua conexão."
+                },
+                {
+                    title: "Confiabilidade da Conexão",
+                    check: (answers) => answers[2] < 4,
+                    feedback: "A confiabilidade da sua conexão de internet atual pode estar impactando negativamente as operações da empresa.",
+                    recommendation: "Avalie a possibilidade de implementar conexões redundantes ou fazer upgrade para um serviço empresarial de maior nível."
+                },
+                {
+                    title: "Conhecimento Técnico",
+                    check: (answers) => answers[3].length < 3,
+                    feedback: "Sua equipe pode se beneficiar de um maior entendimento sobre os conceitos técnicos de internet corporativa.",
+                    recommendation: "Invista em treinamentos para sua equipe de TI sobre as últimas tecnologias e melhores práticas em conectividade empresarial."
+                },
+                {
+                    title: "Planejamento de Infraestrutura",
+                    check: (answers) => !arraysEqual(answers[4], questions[4].correctOrder),
+                    feedback: "Há espaço para melhorar o processo de implementação de novas soluções de conectividade na sua empresa.",
+                    recommendation: "Desenvolva um plano estruturado para avaliação, seleção e implementação de soluções de internet corporativa."
+                },
+                {
+                    title: "Familiaridade com Termos Técnicos",
+                    check: (answers) => answers[5].length < questions[5].words.length,
+                    feedback: "Sua equipe pode não estar totalmente familiarizada com todos os termos relacionados à internet corporativa.",
+                    recommendation: "Crie um glossário interno de termos técnicos e promova sessões de compartilhamento de conhecimento entre a equipe."
+                },
+                {
+                    title: "Infraestrutura de Rede",
+                    check: (answers) => answers[6] < questions[6].cards.length / 2,
+                    feedback: "Pode haver lacunas no entendimento dos componentes essenciais de uma infraestrutura de rede corporativa.",
+                    recommendation: "Realize uma auditoria completa da sua infraestrutura de rede e identifique áreas para melhoria e atualização."
+                },
+                {
+                    title: "Desafios de Conectividade",
+                    check: (answers) => answers[7] === 0 || answers[7] === 1,
+                    feedback: "Sua empresa está enfrentando desafios significativos relacionados à velocidade ou estabilidade da conexão.",
+                    recommendation: "Priorize a resolução desses problemas de conectividade para melhorar a produtividade e eficiência operacional."
+                },
+                {
+                    title: "Investimento em Conectividade",
+                    check: (answers) => answers[8] < 3,
+                    feedback: "O nível atual de investimento em conectividade pode não ser suficiente para atender às necessidades da sua empresa.",
+                    recommendation: "Considere aumentar o orçamento para melhorias na infraestrutura de internet, visando um retorno positivo em produtividade e eficiência."
+                },
+                {
+                    title: "Segurança da Conexão",
+                    check: (answers) => !answers[9].includes(0) || !answers[9].includes(1),
+                    feedback: "Há oportunidades para melhorar a segurança da sua conexão de internet corporativa.",
+                    recommendation: "Implemente soluções de segurança avançadas, como firewalls de próxima geração e VPNs, para proteger seus dados e sistemas."
+                }
+            ];
+
+            return feedbackItems.filter(item => item.check(answers));
+        }
+
+        function arraysEqual(a, b) {
+            if (a.length !== b.length) return false;
+            for (let i = 0; i < a.length; i++) {
+                if (a[i] !== b[i]) return false;
+            }
+            return true;
+        }
+
+        function generatePersonalizedPDF(finalScore, riskLevel, feedback) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(22);
+            doc.setTextColor(41, 128, 185);
+            doc.text('Relatório Personalizado - Quiz Quantum', 105, 20, { align: 'center' });
+
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Pontuação de Eficiência: ${finalScore}%`, 20, 40);
+            doc.text(`Nível de Oportunidade: ${riskLevel}`, 20, 50);
+
+            doc.setFontSize(14);
+            let y = 70;
+            feedback.forEach(item => {
+                doc.setFont('helvetica', 'bold');
+                doc.text(item.title, 20, y);
+                y += 10;
+                doc.setFont('helvetica', 'normal');
+                doc.text(item.feedback, 20, y, { maxWidth: 170 });
+                y += 20;
+                doc.text(`Recomendação: ${item.recommendation}`, 20, y, { maxWidth: 170 });
+                y += 30;
+            });
+
+            doc.setFontSize(10);
+            doc.setTextColor(128, 128, 128);
+            doc.text('© 2023 Quantum Digital. Todos os direitos reservados.', 105, 280, { align: 'center' });
+
+            doc.save('relatorio_personalizado_quantum.pdf');
+        }
+
+        function contactSpecialist() {
+            const whatsappNumbers = [
+                '5511978137265', '5513981165153', '5511978193979', '5511969760830',
+                '5511984535015', '5511966619447', '5511959284476', '5511930117754', '5511977941104'
+            ];
+            const randomIndex = Math.floor(Math.random() * whatsappNumbers.length);
+            const selectedNumber = whatsappNumbers[randomIndex];
+            const message = encodeURIComponent('Olá! Gostaria de falar com um especialista sobre os serviços de Internet Corporativa da Quantum.');
+            window.open(`https://wa.me/${selectedNumber}?text=${message}`, '_blank');
+        }
+
+        function sendResultsToEmail(finalScore, riskLevel, feedback) {
+            const formData = new FormData();
+            formData.append('finalScore', finalScore);
+            formData.append('riskLevel', riskLevel);
+            formData.append('feedback', JSON.stringify(feedback));
+
+            fetch('https://formspree.io/f/quantumdigitalsp@gmail.com', {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Resultados enviados com sucesso para o email.');
+                } else {
+                    console.error('Falha ao enviar resultados para o email.');
+                }
+            }).catch(error => {
+                console.error('Erro ao enviar resultados:', error);
+            });
+        }
+
+        function checkWord(word, row, col, grid) {
+            const directions = [
+                [0, 1],  // right
+                [1, 0],  // down
+                [1, 1],  // diagonal down-right
+                [-1, 1], // diagonal up-right
+                [0, -1], // left
+                [-1, 0], // up
+                [-1, -1],// diagonal up-left
+                [1, -1]  // diagonal down-left
+            ];
+
+            for (let [dx, dy] of directions) {
+                if (checkDirection(word, row, col, dx, dy, grid)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function checkDirection(word, row, col, dx, dy, grid) {
+            const gridHeight = grid.length;
+            const gridWidth = grid[0].length;
+
+            for (let i = 0; i < word.length; i++) {
+                const newRow = row + i * dx;
+                const newCol = col + i * dy;
+
+                if (newRow < 0 || newRow >= gridHeight || newCol < 0 || newCol >= gridWidth) {
+                    return false;
+                }
+
+                if (grid[newRow][newCol] !== word[i]) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        displayQuestion();
+    </script>
+</body>
+
+</html>
