@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum - Contato</title>
+    <link rel="stylesheet" href="./estilos/contato.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container-topo">
+            <a href="/" class="logo">
+                <img src="./images/logo-2.webp" alt="Quantum" width="120" height="60">
+            </a>
+            <nav class="nav">
+                <ul>
+                    <li><a href="home.html">HOME</a></li>
+                    <li><a href="servicos.html">SERVIÇOS</a></li>
+                    <li><a href="quemsomos.html">QUEM SOMOS</a></li>
+                    <li><a href="#">CONTATO</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="hero-bg"></div>
+    </div>
+
+    <main class="main">
+        <div class="container">
+            <h1>Fale conosco, ficaremos felizes<br>em ajudar!</h1>
+
+            <div class="contact-grid">
+                <div class="contact-form-wrapper">
+                    <div class="card">
+                        <h2>Fale com quem te <span class="highlight">entende!</span></h2>
+                        <form id="contactForm" class="contact-form">
+                            <div class="form-group">
+                                <input type="text" id="nome" name="nome" placeholder="Nome" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="email" name="email" placeholder="E-mail" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="assunto" name="assunto" placeholder="Assunto" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea id="mensagem" name="mensagem" placeholder="Mensagem" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">ENVIAR</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="contact-info">
+                    <div class="card">
+                        <h2>Telefone</h2>
+                        <p class="subtitle">Horários de atendimento das<br>9:00 às 18:00 formato BRT</p>
+                        <div class="phone-numbers">
+                            <p>(11) 4053-2155</p>
+                            <p>(11) 2858-4075</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Endereço</h2>
+                        <p class="subtitle">Nossa sede está pronta para<br>lhe receber!</p>
+                        <address>
+                            Rua Salgado de Castro, 46,<br>
+                            Centro – Diadema, São Paulo<br>
+                            CEP: 09920-690
+                        </address>
+                    </div>
+                </div>
+            </div>
+
+            <section class="map-section">
+                <h2>Verifique a disponibilidade de<br>nossos serviços na sua região</h2>
+                <div class="map-container">
+                    <div id="map"></div>
+                    <div class="cep-validator">
+                        <input type="text" id="cep" placeholder="Insira o seu CEP" maxlength="9">
+                        <div id="cep-result" class="cep-result"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>CONTATO</h4>
+                    <p class="endereco">ENDEREÇO</p>
+                    <p>Rua Guipeda de Castro, 46</p>
+                    <p>Centro, Guarulhos, São Paulo</p>
+                    <p>CEP: 07123-010</p>
+                    <p class="atendimento">ATENDIMENTO</p>
+                    <p>(11) 4023-2155</p>
+                    <p>(11) 2858-4075</p>
+                </div>
+                <div class="footer-section">
+                    <h4>SERVIÇOS</h4>
+                    <ul>
+                        <li><a href="#cloud" class="cloud">CLOUD</a></li>
+                        <li><a href="#hospedagem">Hospedagem de site</a></li>
+                        <li><a href="#email">Hospedagem de email</a></li>
+                        <li><a href="#marketing">Email Marketing</a></li>
+                        <li><a href="#cloud">Cloud</a></li>
+                        <li><a href="#colocation">Colocation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>NAVEGAÇÃO</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#servicos">Serviços</a></li>
+                        <li><a href="#contato">Contato</a></li>
+                        <li><a href="#quem-somos">Quem Somos</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="social-links">
+                <a href="#" aria-label="Telefone"><img src="./images/PHONE.webp" alt="Telefone" width="24" height="24"></a>
+                <a href="#" aria-label="LinkedIn"><img src="./images/Linkedin.webp" alt="LinkedIn" width="24" height="24"></a>
+                <a href="#" aria-label="Instagram"><img src="./images/instagram.webp" alt="Instagram" width="24" height="24"></a>
+                <a href="#" aria-label="YouTube"><img src="./images/youtube.webp" alt="YouTube" width="24" height="24"></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=e186b1cb767793ebb09bc237fccddba1ca5063d4"></script>
+    <script src="valida.js"></script>
+</body>
+</html>
